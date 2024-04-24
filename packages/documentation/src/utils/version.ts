@@ -1,4 +1,4 @@
-import * as packageJson from '../../package.json';
+import * as packageJson from '@/../package.json';
 
 export const DEPENDENCIES: any = {
   [packageJson.name]: packageJson.version,

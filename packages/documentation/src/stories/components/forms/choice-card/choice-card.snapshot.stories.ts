@@ -1,4 +1,4 @@
-import { bombArgs } from '../../../../utils';
+import { bombArgs } from '@/utils';
 import { choiceCardDefault, choiceCardMeta } from './choice-card';
 import { StoryObj } from '@storybook/web-components';
 import { html } from 'lit';

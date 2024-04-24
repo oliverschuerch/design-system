@@ -1,5 +1,5 @@
 import { choiceCardDefault, choiceCardGroup, choiceCardMeta } from './choice-card';
-import { MetaComponent } from '../../../../../types';
+import { MetaComponent } from '@/../types';
 
 const meta: MetaComponent = {
   ...choiceCardMeta,

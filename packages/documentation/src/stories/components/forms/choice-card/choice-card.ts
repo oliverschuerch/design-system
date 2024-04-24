@@ -1,10 +1,10 @@
 import type { Args } from '@storybook/web-components';
 import { html } from 'lit/static-html.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { BADGE } from '../../../../../.storybook/constants';
+import { BADGE } from '@/../constants';
 import { nothing } from 'lit';
 import { useArgs } from '@storybook/preview-api';
-import { MetaExtended } from '../../../../../types';
+import { MetaExtended } from '@/../types';
 
 export const choiceCardMeta: MetaExtended = {
   parameters: {
