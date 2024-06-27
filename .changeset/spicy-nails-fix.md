@@ -1,5 +1,5 @@
 ---
-'@swisspost/internet-header': patch
+'@swisspost/internet-header': major
 ---
 
 Fixed focus trap on overlay of the breadcrumb.
