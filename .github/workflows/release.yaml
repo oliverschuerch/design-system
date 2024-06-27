@@ -1,0 +1,138 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+      - release/*
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  changeset-magic:
+    name: Changeset Magic
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: swisspost/design-system/.github/actions/setup-pnpm@main
+
+      # Install dependencies and build packages
+      - name: Install dependencies
+        run: pnpm bootstrap
+
+      # This will fail the build if something in the publish setup is not correct
+      # before changeset magic is starting to run
+      - name: Test publish step
+        run: pnpm -r publish --dry-run
+
+      # The changeset action will behave differently based on whether there are
+      # new changesets on the main branch:
+      #
+      #  - new changesets: create a preview PR with the new version bumps and changelogs
+      #  - no new changesets (the preview PR got merged into main): publish packages
+      - name: Changeset magic
+        id: changesets
+        uses: changesets/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.SWISSPOSTDEVS_ACCESS_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        with:
+          title: 'chore(changesets): 🦋📦 publish packages'
+          commit: 'chore(changesets): publish packages'
+          publish: pnpm changeset:publish
+          version: pnpm changeset:version
+
+  detect-major-release:
+    if: ${{ github.ref }} == 'main'
+    name: Detect Major Release
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ steps.release.outputs.result }}
+      branch: ${{ steps.branch.outputs.branch }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup-pnpm
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Output Changeset Status
+        run: pnpm changeset status --output=changesets.json
+
+      - name: Detect Major Release
+        id: release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs')
+            const changesets = JSON.parse(fs.readFileSync('changesets.json', 'utf8'))
+            const stylesRelease = changesets.releases.find(changeset => changeset.name === '@swisspost/design-system-styles')
+            const oldMajor = stylesRelease?.oldVersion.split('.')[0];
+            const newMajor = stylesRelease?.newVersion.split('.')[0];
+
+            return {
+              isMajor: stylesRelease?.type === 'major' ?? false,
+              oldVersion: stylesRelease?.oldVersion,
+              oldMajor,
+              newVersion: stylesRelease?.newVersion,
+              newMajor,
+              branchName: `release/v${oldMajor}`,
+            }
+
+      - name: Check if Release Branch exists
+        id: branch
+        run: echo "branch=$(git rev-parse --verify --quiet ${{ fromJSON(steps.release.outputs.result).branchName }})" >> $GITHUB_OUTPUT
+
+  setup-release-branch:
+    name: Setup Previous Release Branch
+    runs-on: ubuntu-latest
+    needs: detect-major-release
+    if: ${{ fromJSON(needs.detect-major-release.outputs.release).isMajor }} == 'true' && needs.detect-major-release.outputs.branch == 'TODO REMOVE LATER'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: '@swisspost/design-system-styles@${{ fromJSON(needs.detect-major-release.outputs.release).oldVersion }}'
+
+      - name: Setup
+        uses: ./.github/actions/setup-pnpm
+
+      - name: Install Netlify API
+        run: pnpm install -g netlify-cli
+
+      - name: Create new Netlify Site
+        id: netlify-site
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: echo "netlify-site=$(netlify sites:create --name 'spds-test-v${{ fromJSON(needs.detect-major-release.outputs.release).oldMajor }}' --disable-linking --account-slug 'oliverschuerch' --filter '@swisspost/design-system-documentation')" >> $GITHUB_OUTPUT
+
+      - name: TEST
+        run: echo ${{ steps.netlify-site.outputs.netlify-site }}
+
+      - name: Update Changeset BaseBranch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs')
+            const config = JSON.parse(fs.readFileSync('.changeset/config.json', 'utf8'))
+
+            config.baseBranch = '${{ fromJSON(needs.detect-major-release.outputs.release).branchName }}'
+
+            fs.writeFileSync('.changeset/config.json', JSON.stringify(config, null, 2))
+
+      - name: Commit Changes and Push Release Branch
+        uses: EndBug/add-and-commit@v9
+        with:
+          new_branch: ${{ fromJSON(needs.detect-major-release.outputs.release).branchName }}
+          message: 'chore(setup): create branch "${{ fromJSON(needs.detect-major-release.outputs.release).branchName }}"'
+          push: true
