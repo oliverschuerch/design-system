@@ -1,0 +1,2 @@
+# Redirects from what the browser requests to what we serve
+/v7   https://spds-test-v7.netlify.app
