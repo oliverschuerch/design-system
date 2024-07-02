@@ -1,5 +1,11 @@
 # @swisspost/design-system-documentation
 
+## 5.1.1
+
+### Patch Changes
+
+- Test (by [@oliverschuerch](https://github.com/oliverschuerch) with [`197c36b`](https://github.com/swisspost/design-system/commit/197c36b8c62fbbd8579659f0e997d651ed343fa7))
+
 ## 5.1.0
 
 ### Minor Changes
