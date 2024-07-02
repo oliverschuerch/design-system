@@ -58,7 +58,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.SWISSPOSTDEVS_ACCESS_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
-          title: 'chore(changesets): 🦋📦 publish packages'
+          title: 'chore(changesets): 🦋📦 publish packages (${{ github.ref_name }})'
           commit: 'chore(changesets): publish packages'
           publish: pnpm changeset:publish
           version: pnpm changeset:version
@@ -115,6 +115,7 @@ jobs:
             const styles = JSON.parse(fs.readFileSync('./packages/styles/package.json', 'utf8'))
             const changesets = JSON.parse(fs.readFileSync('changesets.json', 'utf8'))
 
+            console.log(changesets)
             if (changesets.releases.length === 0) {
               return null
             }
