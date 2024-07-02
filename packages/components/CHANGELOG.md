@@ -1,5 +1,13 @@
 # @swisspost/design-system-components
 
+## 7.1.1
+
+### Patch Changes
+
+- Test (by [@oliverschuerch](https://github.com/oliverschuerch) with [`72eb327`](https://github.com/swisspost/design-system/commit/72eb3277c02d1857a56afb30ca3e3e204b57753a))
+- Updated dependencies:
+  - @swisspost/design-system-styles@7.1.1
+
 ## 7.1.0
 
 ### Minor Changes
