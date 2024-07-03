@@ -1,6 +1,6 @@
 {
   "name": "@swisspost/design-system-documentation",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "Swiss Post Design System Documentation.",
   "author": "Swiss Post <design-system@post.ch>",
   "license": "Apache-2.0",
@@ -32,7 +32,7 @@
     "@swisspost/design-system-components-react": "workspace:7.1.0",
     "@swisspost/design-system-icons": "workspace:7.1.0",
     "@swisspost/design-system-styles": "workspace:7.1.0",
-    "@swisspost/internet-header": "workspace:1.13.10",
+    "@swisspost/internet-header": "workspace:2.0.0",
     "bootstrap": "5.3.3"
   },
   "devDependencies": {

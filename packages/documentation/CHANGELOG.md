@@ -1,5 +1,12 @@
 # @swisspost/design-system-documentation
 
+## 5.1.1
+
+### Patch Changes
+
+- Updated dependencies:
+  - @swisspost/internet-header@2.0.0
+
 ## 5.1.0
 
 ### Minor Changes
