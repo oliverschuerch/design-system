@@ -1,5 +1,11 @@
 # @swisspost/design-system-icons
 
+## 7.1.1
+
+### Patch Changes
+
+- Added new Icon (by [@oliverschuerch](https://github.com/oliverschuerch) with [`09cf945`](https://github.com/swisspost/design-system/commit/09cf9459dfdd1c9a7349beb5247fe7f23f201b0b))
+
 ## 7.1.0
 
 ### Minor Changes
