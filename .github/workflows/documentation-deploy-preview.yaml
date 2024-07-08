@@ -53,17 +53,6 @@ jobs:
           echo "preview-url=https://$url_alias--${{ fromJSON(steps.netlify-config.outputs.result).siteUrl }}" >> $GITHUB_OUTPUT
           netlify deploy --filter @swisspost/design-system-documentation --build false --dir ${{ steps.build.outputs.folder }} --alias $url_alias
 
-      # - name: Deploy Documentation Preview
-      #   uses: ./.github/actions/deploy-to-netlify
-      #   id: deploy
-      #   with:
-      #     id: ${{ steps.build.outputs.id }}
-      #     netlify_auth_token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      #     netlify_site_id: ${{ fromJSON(steps.netlify-config.outputs.result).siteId }}
-      #     netlify_site_url: ${{ fromJSON(steps.netlify-config.outputs.result).siteUrl }}
-      #     folder: ${{ steps.build.outputs.folder }}
-      #     package_name: '@swisspost/design-system-documentation'
-
       - name: Update preview message
         uses: ./.github/actions/preview/message/update
         with:
