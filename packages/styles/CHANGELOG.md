@@ -1,5 +1,11 @@
 # @swisspost/design-system-styles
 
+## 7.1.1
+
+### Patch Changes
+
+- Fix (by [@oliverschuerch](https://github.com/oliverschuerch) with [`e78b13f`](https://github.com/swisspost/design-system/commit/e78b13fabf8f970a50dc218d5bec79ea8acc462b))
+
 ## 7.1.0
 
 ### Minor Changes
