@@ -66,9 +66,9 @@ jobs:
         with:
           script: |
             return `# Deployed Documentation Preview
-            - SiteId: ${{ fromJSON(steps.netlify-config.outputs.result).siteId }}
-            - SiteUrl: ${{ fromJSON(steps.netlify-config.outputs.result).siteUrl }}
-            - NetlifyUrl: ${{ steps.deploy.outputs.preview-url }}
+            - SiteId: \`${{ fromJSON(steps.netlify-config.outputs.result).siteId }}\`
+            - SiteUrl: https://${{ fromJSON(steps.netlify-config.outputs.result).siteUrl }}
+            - PreviewUrl: ${{ steps.deploy.outputs.preview-url }}
             `
 
       - name: Output Summary
