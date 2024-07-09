@@ -42,7 +42,7 @@ jobs:
             const fs = require('fs')
             return JSON.parse(fs.readFileSync('./packages/documentation/netlify.config.json', 'utf8'))
 
-      - name: Deploy Documentatoin Preview
+      - name: Deploy Documentation Preview
         id: deploy
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -59,3 +59,17 @@ jobs:
           access-token: ${{ secrets.SWISSPOSTDEVS_ACCESS_TOKEN }}
           issue-number: ${{ steps.build.outputs.id }}
           preview-url: ${{ steps.deploy.outputs.preview-url }}
+
+      - name: Create Summary
+        id: summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            return `# Deployed Documentation Preview
+            - SiteId: ${{ fromJSON(steps.netlify-config.outputs.result).siteId }}
+            - SiteUrl: ${{ fromJSON(steps.netlify-config.outputs.result).siteUrl }}
+            - NetlifyUrl: ${{ steps.deploy.outputs.preview-url }}
+            `
+
+      - name: Output Summary
+        run: echo -e ${{ steps.summary.outputs.result }} >> $GITHUB_STEP_SUMMARY
