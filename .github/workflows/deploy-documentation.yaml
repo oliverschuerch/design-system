@@ -15,7 +15,7 @@ jobs:
 
       - name: TEST
         run: |
-          echo ${{ github.event.workflow_run }}
+          echo ${{ fromJSON(github.event.workflow_run) }}
 
       - name: Setup pnpm & node
         uses: ./.github/actions/setup-pnpm
