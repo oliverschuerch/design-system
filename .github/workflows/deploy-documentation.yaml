@@ -26,19 +26,16 @@ jobs:
           name: design-system-documentation
           folder: build-output
 
-      - name: TEST
-        run: |
-          cd ${{ steps.build.outputs.folder }}
-          dir
-
       - name: Get netlify config
         id: netlify-config
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs')
-            console.log('./${{ steps.build.outputs.folder }}/netlify.config.json')
             return JSON.parse(fs.readFileSync('./${{ steps.build.outputs.folder }}/netlify.config.json', 'utf8'))
+
+      - name: Remove netlify.config.json from artifact
+        run: rm ${{ steps.build.outputs.folder }}/netlify.config.json
 
       - name: Deploy Documentation Preview
         id: deploy
