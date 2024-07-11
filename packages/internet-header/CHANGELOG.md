@@ -1,5 +1,17 @@
 # @swisspost/internet-header
 
+## 2.0.0
+
+### Major Changes
+
+- Test (by [@oliverschuerch](https://github.com/oliverschuerch) with [`7c19742`](https://github.com/swisspost/design-system/commit/7c19742a5c5cdf66892333098563d204c59197b5))
+
+### Patch Changes
+
+- Fixed focus trap on overlay of the breadcrumb. Added a focus trap on search overlay (by [@imagoiq](https://github.com/imagoiq) with [#2922](https://github.com/swisspost/design-system/pull/2922))
+- Updated dependencies:
+  - @swisspost/design-system-styles@7.2.0
+
 ## 1.13.10
 
 ### Patch Changes
