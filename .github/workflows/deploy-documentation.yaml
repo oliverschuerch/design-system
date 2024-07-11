@@ -26,6 +26,9 @@ jobs:
           name: design-system-documentation
           folder: build-output
 
+      - name: TEST
+        run: dir
+
       - name: Get netlify config
         id: netlify-config
         uses: actions/github-script@v7
