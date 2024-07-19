@@ -25,6 +25,9 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup-pnpm
 
+      - name: Setup netlify-cli
+        uses: ./.github/actions/setup-netlify-cli
+
       - name: Download build artifacts
         uses: ./.github/actions/artifact-download
         id: build
@@ -32,18 +35,16 @@ jobs:
           name: design-system-demo
           folder: build-output
 
-      - run: ls -R
-
-      - name: Deploy demo app to netlify
-        uses: ./.github/actions/deploy-to-netlify
+      - name: Deploy Documentation Preview
         id: deploy
-        with:
-          id: ${{ steps.build.outputs.id }}
-          netlify_auth_token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify_site_id: ${{ secrets.NETLIFY_SITE_ID }}
-          netlify_site_url: swisspost-web-frontend.netlify.app
-          folder: ${{ steps.build.outputs.folder }}
-          package_name: '@swisspost/design-system-demo'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        # run command taken from https://gist.github.com/oneohthree/f528c7ae1e701ad990e6, shortened to 28 chars, prepended with build-number
+        run: |
+          url_alias=`echo "preview-${{ steps.build.outputs.id }}" | iconv -t ascii//TRANSLIT | sed -E 's/[~\^]+//g' | sed -E 's/[^a-zA-Z0-9]+/-/g' | sed -E 's/^-+\|-+$//g' | sed -E 's/^-+//g' | sed -E 's/-+$//g' | tr A-Z a-z`
+          echo "preview-url=https://$url_alias--spds-test.netlify.app" >> $GITHUB_OUTPUT
+          netlify deploy --filter @swisspost/design-system-demo --build false --dir ${{ steps.build.outputs.folder }} --alias $url_alias
 
       - name: Update preview message
         uses: ./.github/actions/preview/message/update
