@@ -1,5 +1,11 @@
 # @swisspost/design-system-styles
 
+## 8.1.0
+
+### Minor Changes
+
+- Feature (by [@oliverschuerch](https://github.com/oliverschuerch) with [`0396477`](https://github.com/swisspost/design-system/commit/0396477163c892200559f4a7c46d587cb72355db))
+
 ## 8.0.0
 
 ### Major Changes
